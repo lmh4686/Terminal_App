@@ -1,15 +1,20 @@
 from random import randint, randrange, choice
 
-fruit, grain, home, off = "Go to Fruit farm", "Go to Grain farm", "Go to Home", "Quit the game"
+fruit, grain, base, off = "Go to Fruit farm", "Go to Grain farm", "Go to Home", "Quit the game"
 decision_temp = "Enter a represented number to make a decision."
 fruit_arv_msg = "You are at the Fruit farm"
 grain_arv_msg = "You are at the Grain farm"
-home_arv_msg = "You are in home"
+base_arv_msg = "You are in home"
 err_msg = "Invalid input. Type a number only."
 fruit_obj = ("Plum", "Apple", "Orange")
 grain_obj = ("Wheat", "Oat", "Corn")
 bag = {"Plum": 0, "Apple": 0, "Orange": 0, "Wheat": 0, "Oat": 0, "Corn": 0}
 bag_limit = 30
+storage = {"Plum": 0, "Apple": 0, "Orange": 0, "Wheat": 0, "Oat": 0, "Corn": 0}
+
+
+# class Recipe:
+
 
 
 class InputError(Exception):
@@ -47,7 +52,7 @@ def farm_choice():
             if decision == '1':
                 return fruit_farm()
             elif decision == '2':
-                pass
+                return grain_farm()
             elif decision == '3':
                 quit_game()
             else:
@@ -74,12 +79,12 @@ def fruit_farm():
     print(fruit_arv_msg)
     joint_prompt()
     while True:
-        harvested_amount = randrange(1, 3)
-        item = fruit_obj[randrange(0, len(fruit_obj))]
+        harvested_amount = randint(1, 3)
+        item = choice(fruit_obj)
         while True:
             try:
                 decision = input(f"You found '{item}'(s)!!!\n{decision_temp}"
-                                 f"\n(1)Harvest (2)Skip (3){grain} (4){home} (5){off}\n")
+                                 f"\n(1)Harvest (2)Skip (3){grain} (4){base} (5){off}\n")
                 if decision == '1' and sum(bag.values()) + harvested_amount <= bag_limit:
                     bag_add(item, harvested_amount)
                     break
@@ -107,11 +112,11 @@ def grain_farm():
     joint_prompt()
     while True:
         harvested_amount = randrange(1, 3)
-        item = grain_obj[randrange(0, len(fruit_obj))]
+        item = choice(grain_obj)
         while True:
             try:
                 decision = input(f"You found '{item}'(s)!!!\n{decision_temp}"
-                                 f"\n(1)Harvest (2)Skip (3){fruit} (4){home} (5){off}\n")
+                                 f"\n(1)Harvest (2)Skip (3){fruit} (4){base} (5){off}\n")
                 if decision == '1' and sum(bag.values()) + harvested_amount <= bag_limit:
                     bag_add(item, harvested_amount)
                     break
@@ -132,6 +137,20 @@ def grain_farm():
                 print(InputError(decision))
             except KeyboardInterrupt:
                 keyboard_int_msg(5)
+
+
+# def home():
+#     print(base_arv_msg)
+#     for item in storage.items():
+#         storage[item] += bag[item]
+#         bag[item] = 0
+#     print("All your items in the bag have been transferred to the storage"
+#           f"\nStorage : {storage}")
+#     joint_prompt()
+#     while True:
+#         try:
+
+
 
 farm_choice()
 
