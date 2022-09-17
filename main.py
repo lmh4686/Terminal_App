@@ -11,10 +11,23 @@ grain_obj = ("Wheat", "Oat", "Corn")
 bag = {"Plum": 0, "Apple": 0, "Orange": 0, "Wheat": 0, "Oat": 0, "Corn": 0}
 bag_limit = 30
 storage = {"Plum": 0, "Apple": 0, "Orange": 0, "Wheat": 0, "Oat": 0, "Corn": 0}
-
-
-# class Recipe:
-
+recipes = (
+    {"Apple porridge": {"Apple": 7, "Wheat": 5, "Oat": 3, "Corn": 3}},
+    {"Plum porridge": {"Plum": 5, "Wheat": 4, "Oat": 2, "Corn": 1}},
+    {"Orange porridge": {"Orange": 8, "Wheat": 3, "Oat": 6, "Corn": 4}},
+    {"Mixed porridge": {"Apple": 4, "Plum": 2, "Orange": 3, "Wheat": 2, "Oat": 3, "Corn": 1}}
+)
+dish = []
+# class Recipes:
+#     def __init__(self, name, recipe):
+#         self.name = name
+#         self.recipe = recipe
+#
+#
+# apple_porridge = Recipes("Apple porridge", {"Apple": 7, "Wheat": 5, "Oat": 3, "Corn": 3})
+# plum_porridge = Recipes("Plum porridge", {"Plum": 5, "Wheat": 4, "Oat": 2, "Corn": 1})
+# orange_porridge = Recipes("Orange porridge", {"Orange": 8, "Wheat": 3, "Oat": 6, "Corn": 4})
+# mixed_porridge = Recipes("Mixed porridge", {"Apple": 4, "Plum": 2, "Orange": 3, "Wheat": 2, "Oat": 3, "Corn": 1})
 
 
 class InputError(Exception):
@@ -96,7 +109,7 @@ def fruit_farm():
                 elif decision == '3':
                     return grain_farm()
                 elif decision == '4':
-                    pass
+                    home()
                 elif decision == '5':
                     return quit_game()
                 else:
@@ -128,7 +141,7 @@ def grain_farm():
                 elif decision == '3':
                     return fruit_farm()
                 elif decision == '4':
-                    pass
+                    home()
                 elif decision == '5':
                     quit_game()
                 else:
@@ -139,18 +152,18 @@ def grain_farm():
                 keyboard_int_msg(5)
 
 
-# def home():
-#     print(base_arv_msg)
-#     for item in storage.items():
-#         storage[item] += bag[item]
-#         bag[item] = 0
-#     print("All your items in the bag have been transferred to the storage"
-#           f"\nStorage : {storage}")
-#     joint_prompt()
-#     while True:
-#         try:
-
-
-
-farm_choice()
-
+def home():
+    print(base_arv_msg)
+    for item in storage:
+        storage[item] += bag[item]
+        bag[item] = 0
+    print("All your items in the bag have been transferred to the storage"
+          f"\nStorage : {storage}")
+    joint_prompt()
+    for item in recipes:
+        for recipe in item.values():
+            for grocery, amount in recipe.items():
+                if bag[grocery] < amount:
+                    break
+            else:
+                dish.append(list(item.keys()))
