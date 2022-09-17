@@ -167,3 +167,16 @@ def home():
                     break
             else:
                 dish.append(list(item.keys()))
+    if dish is True:
+        print(f"You can cook following dish(es).\n{dish}")
+
+        while True:
+            try:
+                decision = input(f"{[]}")
+    else:
+        input(f"You don't have enough material to cook")
+
+
+
+
+farm_choice()
