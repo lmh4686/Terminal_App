@@ -163,12 +163,13 @@ def home():
     for item in recipes:
         for name, recipe in item.items():
             for grocery, amount in recipe.items():
-                if bag[grocery] < amount:
+                if storage[grocery] < amount:
                     break
             else:
-                dish.append(name)
-    print(dish)
+                for grocery, amount in recipe.items():
+                    dish[name] = bag[grocery] // amount
 
+print(dish)
 
 farm_choice()
 
