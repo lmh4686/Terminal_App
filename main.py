@@ -48,7 +48,8 @@ def bag_add(item, amount):
 
 
 def bag_full(item):
-    print(f"You obtained {bag_limit - sum(bag.values())} {item}(s). Directing to home to empty the bag.")
+    print(f"You obtained {bag_limit - sum(bag.values())} {item}(s).\n"
+          f"Your bag is full! Directing to home to empty the bag.")
     bag[item] += (bag_limit - sum(bag.values()))
     joint_prompt()
     return home()
@@ -156,6 +157,34 @@ def grain_farm():
                 keyboard_int_msg(5)
 
 
+def get_available_dish():
+    for item in recipes:
+        for name, recipe in item.items():
+            for grocery, amount in recipe.items():
+                if storage[grocery] < amount:
+                    available_dish[name] = 0
+                    break
+            else:
+                for grocery, amount in recipe.items():
+                    dish_count.append(storage[grocery] // recipe[grocery])
+                else:
+                    available_dish[name] = min(dish_count)
+                    dish_count.clear()
+
+
+def cook(food_num, amount):
+    for item in recipes:
+        for name in item.keys():
+            if name != decision_label[food_num]:
+                break
+        else:
+            for grocery, number in item[name].items():
+                storage[grocery] -= (number * amount)
+    get_available_dish()
+    print(f"Congrats!! You cooked {amount} {decision_label[food_num]}!\n Now your storage has :\n"
+          f"{storage}")
+
+
 def home():
     print(base_arv_msg)
     for item in storage:
@@ -164,17 +193,7 @@ def home():
     print("All your items in the bag have been transferred to the storage"
           f"\nStorage : {storage}")
     joint_prompt()
-    for item in recipes:
-        for name, recipe in item.items():
-            for grocery, amount in recipe.items():
-                if storage[grocery] < amount:
-                    break
-            else:
-                for grocery, amount in recipe.items():
-                    dish_count.append(storage[grocery] // recipe[grocery])
-                else:
-                    available_dish[name] += min(dish_count)
-                    dish_count.clear()
+    get_available_dish()
     if sum(available_dish.values()) >= 1:
         print("You can cook:")
         for name, amount in available_dish.items():
@@ -196,27 +215,13 @@ def home():
                     food_amount = input(f"How many {decision_label[food_num]} do you want to cook?"
                                         f" Max: {available_dish[decision_label[food_num]]}\n")
                     cook(food_num, int(food_amount))
-
                 elif decision == '2':
                     return farm_choice()
             except:
                 pass
-
     else:
         print("You don't have enough ingredients to cook. Go back to farm and harvest more ingredients.")
         return farm_choice()
-
-
-def cook(food_num, amount):
-    for item in recipes:
-        for name in item.keys():
-            if name != decision_label[food_num]:
-                break
-        else:
-            for grocery, number in item[name].items():
-                storage[grocery] -= (number * amount)
-    print(f"You cooked {amount} {decision_label[food_num]}! Now your storage has :\n"
-          f"{storage}")
 
 
 farm_choice()
