@@ -161,22 +161,14 @@ def home():
           f"\nStorage : {storage}")
     joint_prompt()
     for item in recipes:
-        for recipe in item.values():
+        for name, recipe in item.items():
             for grocery, amount in recipe.items():
                 if bag[grocery] < amount:
                     break
             else:
-                dish.append(list(item.keys()))
-    if dish is True:
-        print(f"You can cook following dish(es).\n{dish}")
-
-        while True:
-            try:
-                decision = input(f"{[]}")
-    else:
-        input(f"You don't have enough material to cook")
-
-
+                dish.append(name)
+    print(dish)
 
 
 farm_choice()
+
