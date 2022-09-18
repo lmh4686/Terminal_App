@@ -17,7 +17,7 @@ recipes = (
     {"Orange porridge": {"Orange": 8, "Wheat": 3, "Oat": 6, "Corn": 4}},
     {"Mixed porridge": {"Apple": 4, "Plum": 2, "Orange": 3, "Wheat": 2, "Oat": 3, "Corn": 1}}
 )
-dish = []
+dish = {"Apple porridge": 0, "Plum porridge": 0, "Orange porridge": 0, "Mixed porridge": 0}
 dish_count = []
 # class Recipes:
 #     def __init__(self, name, recipe):
@@ -45,9 +45,10 @@ def bag_add(item, amount):
 
 
 def bag_full(item):
-    bag[item] = bag[item] + (bag_limit - sum(bag.values()))
     print(f"You obtained {bag_limit - sum(bag.values())} {item}(s). Directing to home to empty the bag.")
+    bag[item] += (bag_limit - sum(bag.values()))
     joint_prompt()
+    return home()
 
 
 def quit_game():
@@ -99,18 +100,18 @@ def fruit_farm():
             try:
                 decision = input(f"You found '{item}'(s)!!!\n{decision_temp}"
                                  f"\n(1)Harvest (2)Skip (3){grain} (4){base} (5){off}\n")
-                if decision == '1' and sum(bag.values()) + harvested_amount <= bag_limit:
+                if decision == '1' and sum(bag.values()) + harvested_amount < bag_limit:
                     bag_add(item, harvested_amount)
                     break
-                elif decision == '1' and sum(bag.values()) + harvested_amount > bag_limit:
+                elif decision == '1' and sum(bag.values()) + harvested_amount >= bag_limit:
                     bag_full(item)
-                    print("Bag full")
+                    break
                 elif decision == '2':
                     break
                 elif decision == '3':
                     return grain_farm()
                 elif decision == '4':
-                    home()
+                    return home()
                 elif decision == '5':
                     return quit_game()
                 else:
@@ -131,18 +132,17 @@ def grain_farm():
             try:
                 decision = input(f"You found '{item}'(s)!!!\n{decision_temp}"
                                  f"\n(1)Harvest (2)Skip (3){fruit} (4){base} (5){off}\n")
-                if decision == '1' and sum(bag.values()) + harvested_amount <= bag_limit:
+                if decision == '1' and sum(bag.values()) + harvested_amount < bag_limit:
                     bag_add(item, harvested_amount)
                     break
-                elif decision == '1' and sum(bag.values()) + harvested_amount > bag_limit:
-                    bag_full(item)
-                    print("Bag full")
+                elif decision == '1' and sum(bag.values()) + harvested_amount >= bag_limit:
+                    return bag_full(item)
                 elif decision == '2':
                     break
                 elif decision == '3':
                     return fruit_farm()
                 elif decision == '4':
-                    home()
+                    return home()
                 elif decision == '5':
                     quit_game()
                 else:
@@ -172,7 +172,8 @@ def home():
                 else:
                     dish[name] = min(dish_count)
                     dish_count.clear()
-
+    if sum(dish.values()) > 1:
+        print(dish)
 
 farm_choice()
 
