@@ -21,6 +21,7 @@ recipes = (
 )
 available_dish = {"Apple porridge": 0, "Plum porridge": 0, "Orange porridge": 0, "Mixed porridge": 0}
 dish_count = []
+decision_label = {}
 # class Recipes:
 #     def __init__(self, name, recipe):
 #         self.name = name
@@ -65,7 +66,7 @@ def keyboard_int_msg(exit_num):
 def farm_choice():
     while True:
         try:
-            decision = input(f"{decision_temp}\n1.{fruit}\n2.{grain}\n3.{off}\n")
+            decision = input(f"{decision_temp}\n(1).{fruit}\n(2).{grain}\n(3).{off}\n")
             if decision == '1':
                 return fruit_farm()
             elif decision == '2':
@@ -178,27 +179,44 @@ def home():
         print("You can cook:")
         for name, amount in available_dish.items():
             if amount >= 1:
-                print(f"{amount} of {name}.")
+                print(f"{amount} of {name}")
         while True:
             try:
                 decision = input(f"{decision_temp}\n"
-                                 f"(1)Choose dish to cook  (2)Cook later choose farm to harvest\n")
+                                 f"(1)Choose dish to cook  (2)Cook later go to farm to harvest\n")
                 if decision == '1':
                     print(decision_temp)
-                    order_num = 0
+                    order = 0
                     for name, amount in available_dish.items():
                         if amount > 0:
-                            order_num += 1
-                            print(f"({order_num})Cook {name}")
-                    decision = input()
+                            order += 1
+                            print(f"({order})Cook {name}")
+                            decision_label[str(order)] = name
+                    food_num = input()
+                    food_amount = input(f"How many {decision_label[food_num]} do you want to cook?"
+                                        f" Max: {available_dish[decision_label[food_num]]}\n")
+                    cook(food_num, int(food_amount))
+
                 elif decision == '2':
-                    return  farm_choice() 
+                    return farm_choice()
             except:
                 pass
 
     else:
         print("You don't have enough ingredients to cook. Go back to farm and harvest more ingredients.")
         return farm_choice()
+
+
+def cook(food_num, amount):
+    for item in recipes:
+        for name in item.keys():
+            if name != decision_label[food_num]:
+                break
+        else:
+            for grocery, number in item[name].items():
+                storage[grocery] -= (number * amount)
+    print(f"You cooked {amount} {decision_label[food_num]}! Now your storage has :\n"
+          f"{storage}")
 
 
 farm_choice()
