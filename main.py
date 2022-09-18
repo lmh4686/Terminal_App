@@ -1,4 +1,6 @@
 from random import randint, randrange, choice
+import json
+import csv
 
 fruit, grain, base, off = "Go to Fruit farm", "Go to Grain farm", "Go to Home", "Quit the game"
 decision_temp = "Enter a represented number to make a decision."
@@ -17,7 +19,7 @@ recipes = (
     {"Orange porridge": {"Orange": 8, "Wheat": 3, "Oat": 6, "Corn": 4}},
     {"Mixed porridge": {"Apple": 4, "Plum": 2, "Orange": 3, "Wheat": 2, "Oat": 3, "Corn": 1}}
 )
-dish = {"Apple porridge": 0, "Plum porridge": 0, "Orange porridge": 0, "Mixed porridge": 0}
+available_dish = {"Apple porridge": 0, "Plum porridge": 0, "Orange porridge": 0, "Mixed porridge": 0}
 dish_count = []
 # class Recipes:
 #     def __init__(self, name, recipe):
@@ -170,10 +172,34 @@ def home():
                 for grocery, amount in recipe.items():
                     dish_count.append(storage[grocery] // recipe[grocery])
                 else:
-                    dish[name] = min(dish_count)
+                    available_dish[name] += min(dish_count)
                     dish_count.clear()
-    if sum(dish.values()) > 1:
-        print(dish)
+    if sum(available_dish.values()) >= 1:
+        print("You can cook:")
+        for name, amount in available_dish.items():
+            if amount >= 1:
+                print(f"{amount} of {name}.")
+        while True:
+            try:
+                decision = input(f"{decision_temp}\n"
+                                 f"(1)Choose dish to cook  (2)Cook later choose farm to harvest\n")
+                if decision == '1':
+                    print(decision_temp)
+                    order_num = 0
+                    for name, amount in available_dish.items():
+                        if amount > 0:
+                            order_num += 1
+                            print(f"({order_num})Cook {name}")
+                    decision = input()
+                elif decision == '2':
+                    return  farm_choice() 
+            except:
+                pass
+
+    else:
+        print("You don't have enough ingredients to cook. Go back to farm and harvest more ingredients.")
+        return farm_choice()
+
 
 farm_choice()
 
