@@ -181,8 +181,9 @@ def cook(food_num, amount):
             for grocery, number in item[name].items():
                 storage[grocery] -= (number * amount)
     get_available_dish()
-    print(f"Congrats!! You cooked {amount} {decision_label[food_num]}!\n Now your storage has :\n"
+    print(f"Congrats!! You cooked {amount} {decision_label[food_num]}!\nNow your storage has :\n"
           f"{storage}")
+    joint_prompt()
 
 
 def home():
@@ -194,31 +195,37 @@ def home():
           f"\nStorage : {storage}")
     joint_prompt()
     get_available_dish()
-    if sum(available_dish.values()) >= 1:
-        print("You can cook:")
+    print(available_dish)
+    while sum(available_dish.values()) >= 1:
+        print("You can cook :")
         for name, amount in available_dish.items():
             if amount >= 1:
                 print(f"{amount} of {name}")
-        while True:
-            try:
-                decision = input(f"{decision_temp}\n"
-                                 f"(1)Choose dish to cook  (2)Cook later go to farm to harvest\n")
-                if decision == '1':
-                    print(decision_temp)
-                    order = 0
-                    for name, amount in available_dish.items():
-                        if amount > 0:
-                            order += 1
-                            print(f"({order})Cook {name}")
-                            decision_label[str(order)] = name
-                    food_num = input()
-                    food_amount = input(f"How many {decision_label[food_num]} do you want to cook?"
-                                        f" Max: {available_dish[decision_label[food_num]]}\n")
-                    cook(food_num, int(food_amount))
-                elif decision == '2':
-                    return farm_choice()
-            except:
-                pass
+        try:
+            decision = input(f"{decision_temp}\n"
+                             f"(1)Choose dish to cook  (2)Cook later go to farm to harvest  (3){off}\n")
+            if decision == '1':
+                print(decision_temp)
+                order = 0
+                for dish_name, dish_amount in available_dish.items():
+                    if dish_amount > 0:
+                        order += 1
+                        print(f"({order})Cook {dish_name}")
+                        decision_label[str(order)] = dish_name
+                food_num = input()
+                food_amount = input(f"How many {decision_label[food_num]} do you want to cook?"
+                                    f" Max: {available_dish[decision_label[food_num]]}\n")
+                cook(food_num, int(food_amount))
+            elif decision == '2':
+                return farm_choice()
+            elif decision == '3':
+                quit_game()
+            else:
+                raise InputError(decision)
+        except KeyboardInterrupt:
+            keyboard_int_msg(3)
+        except InputError:
+            print(InputError(decision))
     else:
         print("You don't have enough ingredients to cook. Go back to farm and harvest more ingredients.")
         return farm_choice()
