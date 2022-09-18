@@ -18,6 +18,7 @@ recipes = (
     {"Mixed porridge": {"Apple": 4, "Plum": 2, "Orange": 3, "Wheat": 2, "Oat": 3, "Corn": 1}}
 )
 dish = []
+dish_count = []
 # class Recipes:
 #     def __init__(self, name, recipe):
 #         self.name = name
@@ -167,9 +168,11 @@ def home():
                     break
             else:
                 for grocery, amount in recipe.items():
-                    dish[name] = bag[grocery] // amount
+                    dish_count.append(storage[grocery] // recipe[grocery])
+                else:
+                    dish[name] = min(dish_count)
+                    dish_count.clear()
 
-print(dish)
 
 farm_choice()
 
