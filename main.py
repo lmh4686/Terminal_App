@@ -21,7 +21,7 @@ recipes = (
 )
 available_dish = {"Apple porridge": 0, "Plum porridge": 0, "Orange porridge": 0, "Mixed porridge": 0}
 dish_count = []
-decision_label = {}
+printed_dish = {}
 # class Recipes:
 #     def __init__(self, name, recipe):
 #         self.name = name
@@ -175,13 +175,13 @@ def get_available_dish():
 def cook(food_num, amount):
     for item in recipes:
         for name in item.keys():
-            if name != decision_label[food_num]:
+            if name != printed_dish[food_num]:
                 break
         else:
             for grocery, number in item[name].items():
                 storage[grocery] -= (number * amount)
     get_available_dish()
-    print(f"Congrats!! You cooked {amount} {decision_label[food_num]}!\nNow your storage has :\n"
+    print(f"Congrats!! You cooked {amount} {printed_dish[food_num]}!\nNow your storage has :\n"
           f"{storage}")
     joint_prompt()
 
@@ -195,7 +195,6 @@ def home():
           f"\nStorage : {storage}")
     joint_prompt()
     get_available_dish()
-    print(available_dish)
     while sum(available_dish.values()) >= 1:
         print("You can cook :")
         for name, amount in available_dish.items():
@@ -205,17 +204,40 @@ def home():
             decision = input(f"{decision_temp}\n"
                              f"(1)Choose dish to cook  (2)Cook later go to farm to harvest  (3){off}\n")
             if decision == '1':
-                print(decision_temp)
-                order = 0
-                for dish_name, dish_amount in available_dish.items():
-                    if dish_amount > 0:
-                        order += 1
-                        print(f"({order})Cook {dish_name}")
-                        decision_label[str(order)] = dish_name
-                food_num = input()
-                food_amount = input(f"How many {decision_label[food_num]} do you want to cook?"
-                                    f" Max: {available_dish[decision_label[food_num]]}\n")
-                cook(food_num, int(food_amount))
+                while True:
+                    print(decision_temp)
+                    order = 0
+                    for dish_name, dish_amount in available_dish.items():
+                        if dish_amount > 0:
+                            order += 1
+                            print(f"({order})Cook {dish_name}")
+                            printed_dish[str(order)] = dish_name
+                    try:
+                        food_num = input()
+                        if food_num in printed_dish.keys():
+                            break
+                        else:
+                            raise InputError(food_num)
+                    except InputError:
+                        print(InputError(food_num))
+                    except KeyboardInterrupt:
+                        print("You can't quit game in this stage")
+                while True:
+                    max_dish_num = available_dish[printed_dish[food_num]]
+                    try:
+                        food_amount = int(input(f"How many {printed_dish[food_num]} do you want to cook?"
+                                                f" Max: {max_dish_num}\n"))
+                        if 0 < food_amount <= max_dish_num:
+                            cook(food_num, food_amount)
+                            break
+                        elif food_amount > max_dish_num:
+                            print(f"The maximum available amount for this dish is {max_dish_num}.")
+                        else:
+                            raise ValueError
+                    except ValueError:
+                        print(f"Please enter a positive integer bigger than zero.")
+                    except KeyboardInterrupt:
+                        print("You can't quit game in this stage.")
             elif decision == '2':
                 return farm_choice()
             elif decision == '3':
