@@ -31,18 +31,21 @@ class InputError(Exception):
 
 def bag_add(item, amount):
     bag[item] += amount
-    print(f"You obtained {amount} {item}(s).\nBag : {bag}\nYou have {bag_limit - sum(bag.values())} storage left.")
+    print(f"You obtained {amount} {item}(s).\nBag : {bag}\nYou have {bag_storage()} storage left.")
     joint_prompt()
-    if sum(bag.values()) == bag_limit:
-        pass
 
 
 def bag_full(item):
-    print(f"You obtained {bag_limit - sum(bag.values())} {item}(s).\n"
+    bag[item] += (bag_storage())
+    print(f"You obtained {bag_storage()} {item}(s).\n"
           f"Your bag is full! Directing to home to empty the bag.")
-    bag[item] += (bag_limit - sum(bag.values()))
     joint_prompt()
     return home()
+
+
+def bag_storage():
+    bag_space = bag_limit - sum(bag.values())
+    return bag_space
 
 
 def quit_game():
@@ -218,6 +221,7 @@ def home():
                                                 f" Max: {max_dish_num}\n"))
                         if 0 < food_amount <= max_dish_num:
                             cook(food_num, food_amount)
+                            printed_dish.clear()
                             break
                         elif food_amount > max_dish_num:
                             print(f"The maximum available amount for this dish is {max_dish_num}.")
