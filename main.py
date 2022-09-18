@@ -7,7 +7,7 @@ decision_temp = "Enter a represented number to make a decision."
 fruit_arv_msg = "You are at the Fruit farm"
 grain_arv_msg = "You are at the Grain farm"
 base_arv_msg = "You are in home"
-err_msg = "Invalid input. Type a number only."
+key_itr_msg = "You can't quit the game in this stage."
 fruit_obj = ("Plum", "Apple", "Orange")
 grain_obj = ("Wheat", "Oat", "Corn")
 bag = {"Plum": 0, "Apple": 0, "Orange": 0, "Wheat": 0, "Oat": 0, "Corn": 0}
@@ -20,18 +20,8 @@ recipes = (
     {"Mixed porridge": {"Apple": 4, "Plum": 2, "Orange": 3, "Wheat": 2, "Oat": 3, "Corn": 1}}
 )
 available_dish = {"Apple porridge": 0, "Plum porridge": 0, "Orange porridge": 0, "Mixed porridge": 0}
-dish_count = []
+grocery_quotients = []
 printed_dish = {}
-# class Recipes:
-#     def __init__(self, name, recipe):
-#         self.name = name
-#         self.recipe = recipe
-#
-#
-# apple_porridge = Recipes("Apple porridge", {"Apple": 7, "Wheat": 5, "Oat": 3, "Corn": 3})
-# plum_porridge = Recipes("Plum porridge", {"Plum": 5, "Wheat": 4, "Oat": 2, "Corn": 1})
-# orange_porridge = Recipes("Orange porridge", {"Orange": 8, "Wheat": 3, "Oat": 6, "Corn": 4})
-# mixed_porridge = Recipes("Mixed porridge", {"Apple": 4, "Plum": 2, "Orange": 3, "Wheat": 2, "Oat": 3, "Corn": 1})
 
 
 class InputError(Exception):
@@ -60,7 +50,7 @@ def quit_game():
     exit()
 
 
-def keyboard_int_msg(exit_num):
+def keyboard_itr_msg(exit_num):
     print(f"\nIf you wish to quit the game, please type {exit_num}.")
 
 
@@ -77,7 +67,7 @@ def farm_choice():
             else:
                 raise InputError(decision)
         except KeyboardInterrupt:
-            keyboard_int_msg(3)
+            keyboard_itr_msg(3)
         except InputError:
             print(InputError(decision))
 
@@ -91,7 +81,7 @@ def joint_prompt():
             else:
                 print("Please hit only enter")
         except KeyboardInterrupt:
-            print("\nYou will have option to quit the game after this step.")
+            print(key_itr_msg)
 
 
 def fruit_farm():
@@ -123,7 +113,7 @@ def fruit_farm():
             except InputError:
                 print(InputError(decision))
             except KeyboardInterrupt:
-                keyboard_int_msg(5)
+                keyboard_itr_msg(5)
 
 
 def grain_farm():
@@ -154,7 +144,7 @@ def grain_farm():
             except InputError:
                 print(InputError(decision))
             except KeyboardInterrupt:
-                keyboard_int_msg(5)
+                keyboard_itr_msg(5)
 
 
 def get_available_dish():
@@ -166,10 +156,9 @@ def get_available_dish():
                     break
             else:
                 for grocery, amount in recipe.items():
-                    dish_count.append(storage[grocery] // recipe[grocery])
-                else:
-                    available_dish[name] = min(dish_count)
-                    dish_count.clear()
+                    grocery_quotients.append(storage[grocery] // amount)
+                available_dish[name] = min(grocery_quotients)
+                grocery_quotients.clear()
 
 
 def cook(food_num, amount):
@@ -221,7 +210,7 @@ def home():
                     except InputError:
                         print(InputError(food_num))
                     except KeyboardInterrupt:
-                        print("You can't quit game in this stage")
+                        print(key_itr_msg)
                 while True:
                     max_dish_num = available_dish[printed_dish[food_num]]
                     try:
@@ -237,7 +226,7 @@ def home():
                     except ValueError:
                         print(f"Please enter a positive integer bigger than zero.")
                     except KeyboardInterrupt:
-                        print("You can't quit game in this stage.")
+                        print(key_itr_msg)
             elif decision == '2':
                 return farm_choice()
             elif decision == '3':
@@ -245,7 +234,7 @@ def home():
             else:
                 raise InputError(decision)
         except KeyboardInterrupt:
-            keyboard_int_msg(3)
+            keyboard_itr_msg(3)
         except InputError:
             print(InputError(decision))
     else:
