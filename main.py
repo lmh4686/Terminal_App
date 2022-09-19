@@ -29,6 +29,18 @@ class InputError(Exception):
         super().__init__(f"You entered '{user_input}'. Please enter provided number only.")
 
 
+def get_user_choice(question, options):
+    user_input = input(question)
+    if user_input not in options:
+        raise InputError(user_input)
+    return user_input
+
+
+def obj_discover_msg(discovered_item):
+    return f"You found '{discovered_item}'(s)!!!\n{decision_temp}"
+
+
+
 def bag_add(item, amount):
     bag[item] += amount
     print(f"You obtained {amount} {item}(s).\nBag : {bag}\nYou have {bag_storage()} storage left.")
@@ -57,34 +69,49 @@ def keyboard_itr_msg(exit_num):
     print(f"\nIf you wish to quit the game, please type {exit_num}.")
 
 
+def shared_farm_options(user_input, harvested_item, harvested_amount, other_farm):
+    if user_input == '1' and sum(bag.values()) + harvested_amount < bag_limit:
+        bag_add(harvested_item, harvested_amount)
+    elif user_input == '1' and sum(bag.values()) + harvested_amount >= bag_limit:
+        bag_full(harvested_item)
+    elif user_input == '2':
+        pass
+    elif user_input == '3':
+        return other_farm()
+    elif user_input == '4':
+        return home()
+    elif user_input == '5':
+        return quit_game()
+
+
 def farm_choice():
     while True:
         try:
-            decision = input(f"{decision_temp}\n(1).{fruit}\n(2).{grain}\n(3).{off}\n")
+            decision = get_user_choice(f"{decision_temp}\n(1).{fruit}\n(2).{grain}\n(3).{off}\n", ['1', '2', '3'])
+        except KeyboardInterrupt:
+            keyboard_itr_msg(3)
+        except InputError as err:
+            print(err)
+        else:
             if decision == '1':
                 return fruit_farm()
             elif decision == '2':
                 return grain_farm()
             elif decision == '3':
                 quit_game()
-            else:
-                raise InputError(decision)
-        except KeyboardInterrupt:
-            keyboard_itr_msg(3)
-        except InputError:
-            print(InputError(decision))
 
 
 def joint_prompt():
     while True:
         try:
             joint_msg = input("Hit enter to continue")
+        except KeyboardInterrupt:
+            print(key_itr_msg)
+        else:
             if joint_msg == "":
                 break
             else:
                 print("Please hit only enter")
-        except KeyboardInterrupt:
-            print(key_itr_msg)
 
 
 def fruit_farm():
@@ -92,31 +119,19 @@ def fruit_farm():
     joint_prompt()
     while True:
         harvested_amount = randint(1, 3)
-        item = choice(fruit_obj)
+        discovered_item = choice(fruit_obj)
         while True:
             try:
-                decision = input(f"You found '{item}'(s)!!!\n{decision_temp}"
-                                 f"\n(1)Harvest (2)Skip (3){grain} (4){base} (5){off}\n")
-                if decision == '1' and sum(bag.values()) + harvested_amount < bag_limit:
-                    bag_add(item, harvested_amount)
-                    break
-                elif decision == '1' and sum(bag.values()) + harvested_amount >= bag_limit:
-                    bag_full(item)
-                    break
-                elif decision == '2':
-                    break
-                elif decision == '3':
-                    return grain_farm()
-                elif decision == '4':
-                    return home()
-                elif decision == '5':
-                    return quit_game()
-                else:
-                    raise InputError(decision)
-            except InputError:
-                print(InputError(decision))
+                decision = get_user_choice(f"{obj_discover_msg(discovered_item)}"
+                                           f"\n(1)Harvest (2)Skip (3){grain} (4){base} (5){off}\n",
+                                           ['1', '2', '3', '4', '5'])
+            except InputError as err:
+                print(err)
             except KeyboardInterrupt:
                 keyboard_itr_msg(5)
+            else:
+                shared_farm_options(decision, discovered_item, harvested_amount, grain_farm)
+                break
 
 
 def grain_farm():
@@ -124,30 +139,19 @@ def grain_farm():
     joint_prompt()
     while True:
         harvested_amount = randrange(1, 3)
-        item = choice(grain_obj)
+        discovered_item = choice(grain_obj)
         while True:
             try:
-                decision = input(f"You found '{item}'(s)!!!\n{decision_temp}"
-                                 f"\n(1)Harvest (2)Skip (3){fruit} (4){base} (5){off}\n")
-                if decision == '1' and sum(bag.values()) + harvested_amount < bag_limit:
-                    bag_add(item, harvested_amount)
-                    break
-                elif decision == '1' and sum(bag.values()) + harvested_amount >= bag_limit:
-                    return bag_full(item)
-                elif decision == '2':
-                    break
-                elif decision == '3':
-                    return fruit_farm()
-                elif decision == '4':
-                    return home()
-                elif decision == '5':
-                    quit_game()
-                else:
-                    raise InputError(decision)
-            except InputError:
-                print(InputError(decision))
+                decision = get_user_choice(f"{obj_discover_msg(discovered_item)}"
+                                           f"\n(1)Harvest (2)Skip (3){fruit} (4){base} (5){off}\n",
+                                           ['1', '2', '3', '4', '5'])
+            except InputError as err:
+                print(err)
             except KeyboardInterrupt:
                 keyboard_itr_msg(5)
+            else:
+                shared_farm_options(decision, discovered_item, harvested_amount, fruit_farm)
+                break
 
 
 def get_available_dish():
