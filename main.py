@@ -41,7 +41,7 @@ def get_user_choice(prompt, options):
     user_input = input(prompt)
     if type(options) is list and user_input not in options:
         raise InputError(user_input)
-    elif type(options) and user_input not in options:
+    elif type(options) is range and user_input not in options:
         if int(user_input) > max(options):
             raise ExcessError
         elif int(user_input) <= 0:
@@ -227,7 +227,7 @@ def home():
                             print(f"({order})Cook {dish_name}")
                             printed_dish[str(order)] = dish_name
                     try:
-                        food_num = get_user_choice("", list(printed_dish.keys()))
+                        food = get_user_choice("", list(printed_dish.keys()))
                     except InputError as err:
                         print(err)
                     except KeyboardInterrupt:
@@ -235,10 +235,10 @@ def home():
                     else:
                         break
                 while True:
-                    max_dish_num = available_dish[printed_dish[food_num]]
+                    max_dish_num = available_dish[printed_dish[food]]
                     try:
-                        int(get_user_choice(f"How many {printed_dish[food_num]} do you want to cook? "
-                                            f"Max: {max_dish_num}\n", range(1, max_dish_num + 1, 1)))
+                        food_amount = int(get_user_choice(f"How many {printed_dish[food]} do you want to cook? "
+                                                          f"Max: {max_dish_num}\n", range(1, max_dish_num + 1, 1)))
                     except (ValueError, RangeError):
                         print(f"Please enter a positive integer bigger than zero.")
                     except KeyboardInterrupt:
@@ -246,6 +246,7 @@ def home():
                     except ExcessError:
                         print(f"The maximum available amount for this dish is {max_dish_num}.")
                     else:
+                        cook(food, food_amount)
                         break
             elif decision == '2':
                 return farm_choice()
