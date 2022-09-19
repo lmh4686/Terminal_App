@@ -12,7 +12,7 @@ fruit_obj = ("Plum", "Apple", "Orange")
 grain_obj = ("Wheat", "Oat", "Corn")
 bag = {"Plum": 0, "Apple": 0, "Orange": 0, "Wheat": 0, "Oat": 0, "Corn": 0}
 bag_limit = 30
-storage = {"Plum": 0, "Apple": 0, "Orange": 0, "Wheat": 0, "Oat": 0, "Corn": 0}
+storage = {"Plum": 10, "Apple": 10, "Orange": 10, "Wheat": 10, "Oat": 10, "Corn": 10}
 recipes = (
     {"Apple porridge": {"Apple": 7, "Wheat": 5, "Oat": 3, "Corn": 3}},
     {"Plum porridge": {"Plum": 5, "Wheat": 4, "Oat": 2, "Corn": 1}},
@@ -29,16 +29,28 @@ class InputError(Exception):
         super().__init__(f"You entered '{user_input}'. Please enter provided number only.")
 
 
-def get_user_choice(question, options):
-    user_input = input(question)
-    if user_input not in options:
+class RangeError(Exception):
+    pass
+
+
+class ExcessError(Exception):
+    pass
+
+
+def get_user_choice(prompt, options):
+    user_input = input(prompt)
+    if type(options) is list and user_input not in options:
         raise InputError(user_input)
+    elif type(options) and user_input not in options:
+        if int(user_input) > max(options):
+            raise ExcessError
+        elif int(user_input) <= 0:
+            raise RangeError
     return user_input
 
 
 def obj_discover_msg(discovered_item):
     return f"You found '{discovered_item}'(s)!!!\n{decision_temp}"
-
 
 
 def bag_add(item, amount):
@@ -50,7 +62,7 @@ def bag_add(item, amount):
 def bag_full(item):
     bag[item] += (bag_storage())
     print(f"You obtained {bag_storage()} {item}(s).\n"
-          f"Your bag is full! Directing to home to empty the bag.")
+          f"Your bag is full! Directing home to empty the bag.")
     joint_prompt()
     return home()
 
@@ -197,8 +209,14 @@ def home():
             if amount >= 1:
                 print(f"{amount} of {name}")
         try:
-            decision = input(f"{decision_temp}\n"
-                             f"(1)Choose dish to cook  (2)Cook later go to farm to harvest  (3){off}\n")
+            decision = get_user_choice(f"{decision_temp}\n"
+                                       f"(1)Choose dish to cook  (2)Cook later go to farm to harvest  (3){off}\n",
+                                       ['1', '2', '3'])
+        except KeyboardInterrupt:
+            keyboard_itr_msg(3)
+        except InputError as err:
+            print(err)
+        else:
             if decision == '1':
                 while True:
                     print(decision_temp)
@@ -209,42 +227,32 @@ def home():
                             print(f"({order})Cook {dish_name}")
                             printed_dish[str(order)] = dish_name
                     try:
-                        food_num = input()
-                        if food_num in printed_dish.keys():
-                            break
-                        else:
-                            raise InputError(food_num)
-                    except InputError:
-                        print(InputError(food_num))
+                        food_num = get_user_choice("", list(printed_dish.keys()))
+                    except InputError as err:
+                        print(err)
                     except KeyboardInterrupt:
                         print(key_itr_msg)
+                    else:
+                        break
                 while True:
                     max_dish_num = available_dish[printed_dish[food_num]]
                     try:
-                        food_amount = int(input(f"How many {printed_dish[food_num]} do you want to cook?"
-                                                f" Max: {max_dish_num}\n"))
-                        if 0 < food_amount <= max_dish_num:
-                            cook(food_num, food_amount)
-                            printed_dish.clear()
-                            break
-                        elif food_amount > max_dish_num:
-                            print(f"The maximum available amount for this dish is {max_dish_num}.")
-                        else:
-                            raise ValueError
-                    except ValueError:
+                        int(get_user_choice(f"How many {printed_dish[food_num]} do you want to cook? "
+                                            f"Max: {max_dish_num}\n", range(1, max_dish_num + 1, 1)))
+                    except (ValueError, RangeError):
                         print(f"Please enter a positive integer bigger than zero.")
                     except KeyboardInterrupt:
                         print(key_itr_msg)
+                    except ExcessError:
+                        print(f"The maximum available amount for this dish is {max_dish_num}.")
+                    else:
+                        break
             elif decision == '2':
                 return farm_choice()
             elif decision == '3':
                 quit_game()
             else:
                 raise InputError(decision)
-        except KeyboardInterrupt:
-            keyboard_itr_msg(3)
-        except InputError:
-            print(InputError(decision))
     else:
         print("You don't have enough ingredients to cook. Go back to farm and harvest more ingredients.")
         return farm_choice()
