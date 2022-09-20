@@ -1,14 +1,14 @@
 from random import randint, randrange, choice
 from prettytable import PrettyTable
-import json
-import csv
-t = PrettyTable()
-fruit, grain, off = "Go to Fruit farm", "Go to Grain farm", "Quit the game"
-decision_temp = "Enter a represented number to make a decision."
-fruit_arv_msg = "You are at the Fruit farm"
-grain_arv_msg = "You are at the Grain farm"
-base_arv_msg = "You are in home"
-key_itr_msg = "You can't quit the game in this stage."
+from colorama import init, Fore, Back, Style
+t, c, b, s, r = PrettyTable(), Fore, Back, Style, Style.RESET_ALL
+init()
+fruit, grain, off = f"Go to Fruit farm", f"Go to Grain farm", f"Quit the game"
+decision_temp = f"Enter a {c.RED}represented number{r} to make a {c.GREEN}decision{r}."
+fruit_arv_msg = f"{b.YELLOW}{c.BLACK}{s.DIM}You are at the Fruit farm{r}"
+grain_arv_msg = f"{b.YELLOW}{c.BLACK}{s.DIM}You are at the Grain farm{r}"
+base_arv_msg = f"{b.LIGHTYELLOW_EX}{s.BRIGHT}{c.BLACK}You are in home{r}"
+key_itr_msg = f"{b.RED}{c.BLACK}{s.DIM}You can't quit the game in this stage.{r}"
 fruit_obj = ("Plum", "Apple", "Orange")
 grain_obj = ("Wheat", "Oat", "Corn")
 bag = {"Plum": 0, "Apple": 0, "Orange": 0, "Wheat": 0, "Oat": 0, "Corn": 0}
@@ -27,7 +27,7 @@ printed_dish = {}
 
 class InputError(Exception):
     def __init__(self, user_input):
-        super().__init__(f"You entered '{user_input}'. Please enter provided number only.")
+        super().__init__(f"You entered '{user_input}'. Please enter {c.RED}provided number{r} only.")
 
 
 class RangeError(Exception):
@@ -39,7 +39,7 @@ class ExcessError(Exception):
 
 
 def keyboard_itr_msg(exit_num):
-    print(f"\nIf you wish to quit the game, please type {exit_num}.")
+    print(f"\nIf you wish to {s.DIM}{c.RED}quit{r} the game, please type {c.RED}{exit_num}{r}.")
 
 
 def get_user_choice(prompt, options):
@@ -57,22 +57,22 @@ def get_user_choice(prompt, options):
 def joint_prompt():
     while True:
         try:
-            joint_msg = input("Hit enter to continue")
+            joint_msg = input(f"Hit {c.RED}enter{r} to continue")
         except KeyboardInterrupt:
             print(key_itr_msg)
         else:
             if joint_msg == "":
                 break
             else:
-                print("Please hit only enter")
+                print(f"Please hit {c.RED}only enter{r}")
 
 
 def obj_discover_msg(discovered_item):
-    return f"You found '{discovered_item}'(s)!!!\n{decision_temp}"
+    return f"You found {c.BLUE}{discovered_item}(s){r}!!!\n{decision_temp}"
 
 
 def check_space(storage_type):
-    t.field_names = ["ITEM", "AMOUNT"]
+    t.field_names = [f"{c.GREEN}ITEM{r}", f"{c.BLUE}AMOUNT{r}"]
     for grocery, amount in storage_type.items():
         if amount > 0:
             t.add_row([grocery, amount])
@@ -82,7 +82,7 @@ def check_space(storage_type):
 
 
 def check_recipe():
-    t.field_names = ["DISH NAME", "RECIPE"]
+    t.field_names = [f"{c.GREEN}DISH NAME{r}", f"{c.BLUE}RECIPE{r}"]
     for item in recipes:
         for dish_name, recipe in item.items():
             t.add_row([dish_name, recipe])
@@ -93,13 +93,13 @@ def check_recipe():
 
 def bag_add(item, amount):
     bag[item] += amount
-    print(f"You obtained {amount} {item}(s). You have {bag_space()} storage left.")
+    print(f"You obtained {c.BLUE}{amount} {item}(s){r}. You have {c.GREEN}{bag_space()}{r} storage left.")
     joint_prompt()
 
 
 def bag_full(item):
-    print(f"You obtained {bag_space()} {item}(s).\n"
-          f"Your bag is full! Directing home to empty the bag.")
+    print(f"You obtained {c.BLUE}{bag_space()} {item}(s){r}.\n"
+          f"Your {c.RED}bag is full{r}! {c.GREEN}Directing home{r} to empty the bag.")
     bag[item] += bag_space()
     joint_prompt()
     return home()
@@ -111,7 +111,7 @@ def bag_space():
 
 
 def quit_game():
-    print("Thank you for playing!")
+    print(f"{b.YELLOW}{c.BLACK}{s.DIM}Thank you for playing!{r}")
     exit()
 
 
@@ -164,7 +164,7 @@ def main_farm(item, amount, other_farm):
             keyboard_itr_msg(7)
         else:
             shared_farm_options(decision, item, amount, other_farm)
-            if decision == '1' or '2':
+            if decision == '1' or decision == '2':
                 break
 
 
@@ -209,9 +209,8 @@ def cook(food_num, amount):
             for grocery, number in item[name].items():
                 storage[grocery] -= (number * amount)
     get_available_dish()
-    print(f"Congrats!! You cooked {amount} {printed_dish[food_num]}!\nNow your storage has :\n"
-          f"{storage}")
-    joint_prompt()
+    print(f"Congrats!! You cooked {c.GREEN}{amount} {printed_dish[food_num]}{r}!\nNow your storage has :\n")
+    check_space(storage)
 
 
 def home():
@@ -219,15 +218,15 @@ def home():
     for grocery, amount in bag.items():
         storage[grocery] += amount
         bag[grocery] = 0
-    print("All your items in the bag have been transferred to the storage\nStorage : ")
+    print(f"All your {c.GREEN}items{r} in the bag have been "
+          f"{c.RED}transferred{r} to the {c.GREEN}storage{r}\nStorage : ")
     check_space(storage)
     get_available_dish()
     while sum(available_dish.values()) >= 1:
-        print("You can cook :")
+        print(f"You can {c.GREEN}cook{r} :")
         for name, amount in available_dish.items():
             if amount >= 1:
-                print(f"{amount} of {name}")
-        joint_prompt()
+                print(f"{c.BLUE}{amount}{r} of {c.GREEN}{name}{r}")
         try:
             decision = get_user_choice(f"{decision_temp}\n"
                                        f"(1)Choose dish to cook  (2)Cook later go to farm to harvest (3){off}\n",
@@ -240,12 +239,12 @@ def home():
             if decision == '1':
                 while True:
                     print(decision_temp)
-                    order = 0
+                    order_num = 0
                     for dish_name, dish_amount in available_dish.items():
                         if dish_amount > 0:
-                            order += 1
-                            print(f"({order})Cook {dish_name}")
-                            printed_dish[str(order)] = dish_name
+                            order_num += 1
+                            print(f"({order_num})Cook {c.GREEN}{dish_name}{r}")
+                            printed_dish[str(order_num)] = dish_name
                     try:
                         food = get_user_choice("", list(printed_dish.keys()))
                     except InputError as err:
@@ -257,25 +256,28 @@ def home():
                 while True:
                     max_dish_num = available_dish[printed_dish[food]]
                     try:
-                        food_amount = int(get_user_choice(f"How many {printed_dish[food]} do you want to cook? "
-                                                          f"Max: {max_dish_num}\n", range(1, max_dish_num + 1, 1)))
+                        food_amount = int(get_user_choice(f"How many {c.GREEN}{printed_dish[food]}{r}"
+                                                          f"do you want to {c.GREEN}cook{r}? "
+                                                          f"Max: {c.RED}{max_dish_num}{r}\n",
+                                                          range(1, max_dish_num + 1, 1)))
                     except (ValueError, RangeError):
-                        print("Please enter a positive integer bigger than zero.")
+                        print(f"{b.RED}{c.BLACK}Please enter a positive integer bigger than zero.{r}")
                     except KeyboardInterrupt:
                         print(key_itr_msg)
                     except ExcessError:
-                        print(f"The maximum available amount for this dish is {max_dish_num}.")
+                        print(f"{b.RED}{c.BLACK}The maximum available amount for this dish is {max_dish_num}.{r}")
                     else:
                         cook(food, food_amount)
                         break
             elif decision == '2':
                 return farm_choice()
-            elif decision == '4':
+            elif decision == '3':
                 quit_game()
             else:
                 raise InputError(decision)
     else:
-        print("You don't have enough ingredients to cook. Go back to farm and harvest more ingredients.")
+        print(f"You {c.RED}don't have enough ingredients{r} to cook.\n"
+              f"{c.GREEN}Go back to farm{r} and {c.BLUE}harvest more{r} ingredients.")
         return farm_choice()
 
 
