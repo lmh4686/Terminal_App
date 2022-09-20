@@ -3,7 +3,7 @@ from prettytable import PrettyTable
 import json
 import csv
 t = PrettyTable()
-fruit, grain, base, bag_check, off = "Go to Fruit farm", "Go to Grain farm", "Go to Home", "Check bag", "Quit the game"
+fruit, grain, off = "Go to Fruit farm", "Go to Grain farm", "Quit the game"
 decision_temp = "Enter a represented number to make a decision."
 fruit_arv_msg = "You are at the Fruit farm"
 grain_arv_msg = "You are at the Grain farm"
@@ -74,7 +74,7 @@ def obj_discover_msg(discovered_item):
 def check_space(storage_type):
     t.field_names = ["ITEM", "AMOUNT"]
     for grocery, amount in storage_type.items():
-        if amount > 1:
+        if amount > 0:
             t.add_row([grocery, amount])
     print(t)
     t.clear()
@@ -93,21 +93,21 @@ def check_recipe():
 
 def bag_add(item, amount):
     bag[item] += amount
-    print(f"You obtained {amount} {item}(s). You have {bag_storage()} storage left.")
+    print(f"You obtained {amount} {item}(s). You have {bag_space()} storage left.")
     joint_prompt()
 
 
 def bag_full(item):
-    print(f"You obtained {bag_storage()} {item}(s).\n"
+    print(f"You obtained {bag_space()} {item}(s).\n"
           f"Your bag is full! Directing home to empty the bag.")
-    bag[item] += (bag_storage())
+    bag[item] += bag_space()
     joint_prompt()
     return home()
 
 
-def bag_storage():
-    bag_space = bag_limit - sum(bag.values())
-    return bag_space
+def bag_space():
+    available_space = bag_limit - sum(bag.values())
+    return available_space
 
 
 def quit_game():
@@ -140,31 +140,32 @@ def shared_farm_options(user_input, harvested_item, harvested_amount, other_farm
     elif user_input == '2':
         pass
     elif user_input == '3':
-        return other_farm()
+        check_space(bag)
     elif user_input == '4':
-        return check_space(bag)
+        check_recipe()
     elif user_input == '5':
-        return home()
+        return grain_farm() if 'Grain' in other_farm else fruit_farm()
     elif user_input == '6':
-        return check_recipe()
+        return home()
     elif user_input == '7':
-        return quit_game()
+        quit_game()
 
 
 def main_farm(item, amount, other_farm):
     while True:
         try:
             decision = get_user_choice(f"{obj_discover_msg(item)}"
-                                       f"\n(1)Harvest (2)Skip (3){other_farm} "
-                                       f"(4){bag_check} (5){base} (6)Check recipes (7){off}\n",
+                                       f"\n(1)Harvest (2)Skip (3)Check bag (4)Check recipes\n"
+                                       f"(5){other_farm} (6)Go to home (7){off}\n",
                                        ['1', '2', '3', '4', '5', '6', '7'])
         except InputError as err:
             print(err)
         except KeyboardInterrupt:
-            keyboard_itr_msg(5)
+            keyboard_itr_msg(7)
         else:
             shared_farm_options(decision, item, amount, other_farm)
-            break
+            if decision == '1' or '2':
+                break
 
 
 def fruit_farm():
@@ -215,9 +216,9 @@ def cook(food_num, amount):
 
 def home():
     print(base_arv_msg)
-    for item in storage:
-        storage[item] += bag[item]
-        bag[item] = 0
+    for grocery, amount in bag.items():
+        storage[grocery] += amount
+        bag[grocery] = 0
     print("All your items in the bag have been transferred to the storage\nStorage : ")
     check_space(storage)
     get_available_dish()
@@ -229,9 +230,8 @@ def home():
         joint_prompt()
         try:
             decision = get_user_choice(f"{decision_temp}\n"
-                                       f"(1)Choose dish to cook  (2)Cook later go to farm to harvest  "
-                                       f"(3)Check storage  (4){off}\n",
-                                       ['1', '2', '3', '4'])
+                                       f"(1)Choose dish to cook  (2)Cook later go to farm to harvest (3){off}\n",
+                                       ['1', '2', '3'])
         except KeyboardInterrupt:
             keyboard_itr_msg(3)
         except InputError as err:
@@ -270,8 +270,6 @@ def home():
                         break
             elif decision == '2':
                 return farm_choice()
-            elif decision == '3':
-                check_space(storage)
             elif decision == '4':
                 quit_game()
             else:
