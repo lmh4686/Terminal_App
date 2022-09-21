@@ -281,5 +281,6 @@ def home():
         return farm_choice()
 
 
-farm_choice()
+if __name__ == '__main__':
+    farm_choice()
 
