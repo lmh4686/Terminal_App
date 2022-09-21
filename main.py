@@ -93,9 +93,11 @@ def check_recipe():
 
 def bag_add(item, amount):
     bag[item] += amount
-    print(f"You obtained {c.BLUE}{amount} {item}(s){r}. You have {c.GREEN}{bag_space()}{r} storage left.")
-    joint_prompt()
-
+    if __name__ == '__main__':
+        print(f"You obtained {c.BLUE}{amount} {item}(s){r}. You have {c.GREEN}{bag_space()}{r} storage left.")
+        joint_prompt()
+    else:
+        return bag[item]
 
 def bag_full(item):
     print(f"You obtained {c.BLUE}{bag_space()} {item}(s){r}.\n"
@@ -201,16 +203,19 @@ def get_available_dish():
 
 
 def cook(food_num, amount):
-    for item in recipes:
-        for name in item.keys():
+    for recipe in recipes:
+        for name in recipe.keys():
             if name != printed_dish[food_num]:
                 break
         else:
-            for grocery, number in item[name].items():
+            for grocery, number in recipe[name].items():
                 storage[grocery] -= (number * amount)
-    get_available_dish()
-    print(f"Congrats!! You cooked {c.GREEN}{amount} {printed_dish[food_num]}{r}!\nNow your storage has :\n")
-    check_space(storage)
+    if __name__ == '__main__':
+        get_available_dish()
+        print(f"Congrats!! You cooked {c.GREEN}{amount} {printed_dish[food_num]}{r}!\nNow your storage has :\n")
+        check_space(storage)
+    else:
+        return storage
 
 
 def home():
@@ -246,7 +251,7 @@ def home():
                             print(f"({order_num})Cook {c.GREEN}{dish_name}{r}")
                             printed_dish[str(order_num)] = dish_name
                     try:
-                        food = get_user_choice("", list(printed_dish.keys()))
+                        food_choice = get_user_choice("", list(printed_dish.keys()))
                     except InputError as err:
                         print(err)
                     except KeyboardInterrupt:
@@ -254,9 +259,9 @@ def home():
                     else:
                         break
                 while True:
-                    max_dish_num = available_dish[printed_dish[food]]
+                    max_dish_num = available_dish[printed_dish[food_choice]]
                     try:
-                        food_amount = int(get_user_choice(f"How many {c.GREEN}{printed_dish[food]}{r}"
+                        food_amount = int(get_user_choice(f"How many {c.GREEN}{printed_dish[food_choice]}{r}"
                                                           f"do you want to {c.GREEN}cook{r}? "
                                                           f"Max: {c.RED}{max_dish_num}{r}\n",
                                                           range(1, max_dish_num + 1, 1)))
@@ -267,7 +272,7 @@ def home():
                     except ExcessError:
                         print(f"{b.RED}{c.BLACK}The maximum available amount for this dish is {max_dish_num}.{r}")
                     else:
-                        cook(food, food_amount)
+                        cook(food_choice, food_amount)
                         break
             elif decision == '2':
                 return farm_choice()
@@ -279,7 +284,6 @@ def home():
         print(f"You {c.RED}don't have enough ingredients{r} to cook.\n"
               f"{c.GREEN}Go back to farm{r} and {c.BLUE}harvest more{r} ingredients.")
         return farm_choice()
-
 
 if __name__ == '__main__':
     farm_choice()
