@@ -12,7 +12,7 @@ Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Windows-Subsystem-L
 This guidance is originally posted on [HERE](https://janelbrandon.medium.com/a-guide-for-using-wsl-for-development-d135670313a6).
 <!-- ### 3. Install [Python 3.10](https://www.python.org/downloads/)
 #### In your ubuntu, apply this code one by one to install Python: -->
-### 4. Install [Python 3](https://www.python.org/downloads/) by applying code below one by one at ubuntu.
+### 4. Install [Python 3](https://www.python.org/downloads/) by applying code below one by one to ubuntu.
 ```
 sudo apt update
 sudo apt install software-properties-commonsoftware-properties-common

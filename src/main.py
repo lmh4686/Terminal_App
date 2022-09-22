@@ -2,24 +2,30 @@ from random import randint, randrange, choice
 from prettytable import PrettyTable
 from colorama import init, Fore, Back, Style
 import ascii_magic
-
+#Module functions
 t, c, b, s, r = PrettyTable(), Fore, Back, Style, Style.RESET_ALL
 init()
-fruit, grain, off = f"Go to Fruit farm", f"Go to Grain farm", f"Quit the game"
-decision_temp = f"Enter a {c.RED}represented number{r} to make a {c.GREEN}decision{r}."
-fruit_arv_msg = f"{b.LIGHTYELLOW_EX}{c.BLACK}{s.DIM}You are at the Fruit farm{r}"
+#ASCii settings by locations
 landing = ascii_magic.from_image_file('../docs/landing.jpg', columns=70, back=ascii_magic.Back.BLACK)
 fruit_landing = ascii_magic.from_image_file('../docs/fruit_farm.jpg', columns=70, back=ascii_magic.Back.BLACK)
 grain_landing = ascii_magic.from_image_file('../docs/grain_farm.jpg', columns=50, back=ascii_magic.Back.BLACK)
 home_landing = ascii_magic.from_image_file('../docs/home.jpg', columns=60, back = ascii_magic.Back.BLACK)
+#Commonly used templates
+fruit, grain, off = f"Go to Fruit farm", f"Go to Grain farm", f"Quit the game"
+decision_temp = f"Enter a {c.RED}represented number{r} to make a {c.GREEN}decision{r}."
+fruit_arv_msg = f"{b.LIGHTYELLOW_EX}{c.BLACK}{s.DIM}You are at the Fruit farm{r}"
 grain_arv_msg = f"{b.LIGHTYELLOW_EX}{c.BLACK}{s.DIM}You are at the Grain farm{r}"
 base_arv_msg = f"{b.LIGHTYELLOW_EX}{s.DIM}{c.BLACK}You are in home{r}"
+#Error message for KeyboardInterrupt
 key_itr_msg = f"\n{b.RED}{c.WHITE}You can't quit the game in this stage.{r}"
+#Harvestable objects
 fruit_obj = ("Plum", "Apple", "Orange")
 grain_obj = ("Wheat", "Oat", "Corn")
+#Storages
 bag = {"Plum": 0, "Apple": 0, "Orange": 0, "Wheat": 0, "Oat": 0, "Corn": 0}
 bag_limit = 30
 storage = {"Plum": 0, "Apple": 0, "Orange": 0, "Wheat": 0, "Oat": 0, "Corn": 0}
+#Variables for cook()
 recipes = (
     {"Apple porridge": {"Apple": 7, "Wheat": 5, "Oat": 3, "Corn": 3}},
     {"Plum porridge": {"Plum": 5, "Wheat": 4, "Oat": 2, "Corn": 1}},
