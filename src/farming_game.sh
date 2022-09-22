@@ -1,7 +1,7 @@
 #!/bin/bash
-printf 'To run the prgoram,\nI need your permission to install the following modules:\n'
+printf 'Authorisation required for activating virtual environment and download: \n'
 cat requirements.txt
-echo "Do you authorise to install? [Y,n]"
+echo "Do you authorise to proceed? [Y,n]"
 read input
 if [[ $input == "Y" || $input == "y" ]]; then
     echo "Creaing & Activaing Virtual Environment..."

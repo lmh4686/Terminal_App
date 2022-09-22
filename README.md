@@ -29,12 +29,12 @@ git clone https://github.com/lmh4686/Terminal_App.git
 ```
 cd Terminal_App/src
 ```
-### 6. Create and activate Virenv with this commands in your ubuntu.
+### 7. Excecute the program.
 ```
-python3 -m venv .venv
-source .venv/bin/activate
+./farming_game.sh
 ```
-### 7. Excecute the program
+### 8. Authorise the program to activate Virtualenv and download packages.
+
 
 <!-- fruit farm: https://unsplash.com/photos/0zpoa3TacEo
 grain farm:https://unsplash.com/photos/0zpoa3TacEo
