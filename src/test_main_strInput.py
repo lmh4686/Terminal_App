@@ -1,5 +1,5 @@
 import pytest
-import main
+import src.main as main
 
 str_inputs = iter(['1', '2', '3', '4', 'a', '!'])
 num_inputs = iter([1, 0, 5, 1.1, 'a'])

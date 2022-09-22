@@ -1,17 +1,20 @@
 from random import randint, randrange, choice
 from prettytable import PrettyTable
 from colorama import init, Fore, Back, Style
-import json
-from sys import argv
+import ascii_magic
 
 t, c, b, s, r = PrettyTable(), Fore, Back, Style, Style.RESET_ALL
 init()
 fruit, grain, off = f"Go to Fruit farm", f"Go to Grain farm", f"Quit the game"
 decision_temp = f"Enter a {c.RED}represented number{r} to make a {c.GREEN}decision{r}."
-fruit_arv_msg = f"{b.LIGHTYELLOW_EX}{c.BLACK}{s.BRIGHT}You are at the Fruit farm{r}"
-grain_arv_msg = f"{b.LIGHTYELLOW_EX}{c.BLACK}{s.BRIGHT}You are at the Grain farm{r}"
-base_arv_msg = f"{b.LIGHTYELLOW_EX}{s.BRIGHT}{c.BLACK}You are in home{r}"
-key_itr_msg = f"{b.RED}{c.BLACK}{s.BRIGHT}You can't quit the game in this stage.{r}"
+fruit_arv_msg = f"{b.LIGHTYELLOW_EX}{c.BLACK}{s.DIM}You are at the Fruit farm{r}"
+landing = ascii_magic.from_image_file('../docs/landing.jpg', columns=70, back=ascii_magic.Back.BLACK)
+fruit_landing = ascii_magic.from_image_file('../docs/fruit_farm.jpg', columns=70, back=ascii_magic.Back.BLACK)
+grain_landing = ascii_magic.from_image_file('../docs/grain_farm.jpg', columns=50, back=ascii_magic.Back.BLACK)
+home_landing = ascii_magic.from_image_file('../docs/home.jpg', columns=60, back = ascii_magic.Back.BLACK)
+grain_arv_msg = f"{b.LIGHTYELLOW_EX}{c.BLACK}{s.DIM}You are at the Grain farm{r}"
+base_arv_msg = f"{b.LIGHTYELLOW_EX}{s.DIM}{c.BLACK}You are in home{r}"
+key_itr_msg = f"\n{b.RED}{c.WHITE}You can't quit the game in this stage.{r}"
 fruit_obj = ("Plum", "Apple", "Orange")
 grain_obj = ("Wheat", "Oat", "Corn")
 bag = {"Plum": 0, "Apple": 0, "Orange": 0, "Wheat": 0, "Oat": 0, "Corn": 0}
@@ -71,11 +74,11 @@ def joint_prompt():
 
 
 def obj_discover_msg(discovered_item):
-    return f"You found {c.BLUE}{discovered_item}(s){r}!!!\n{decision_temp}"
+    return f"You found {c.CYAN}{discovered_item}(s){r}!!!\n{decision_temp}"
 
 
 def check_space(storage_type):
-    t.field_names = [f"{c.GREEN}ITEM{r}", f"{c.BLUE}AMOUNT{r}"]
+    t.field_names = [f"{c.GREEN}ITEM{r}", f"{c.CYAN}AMOUNT{r}"]
     for grocery, amount in storage_type.items():
         if amount > 0:
             t.add_row([grocery, amount])
@@ -85,7 +88,7 @@ def check_space(storage_type):
 
 
 def check_recipe():
-    t.field_names = [f"{c.GREEN}DISH NAME{r}", f"{c.BLUE}RECIPE{r}"]
+    t.field_names = [f"{c.GREEN}DISH NAME{r}", f"{c.CYAN}RECIPE{r}"]
     for item in recipes:
         for dish_name, recipe in item.items():
             t.add_row([dish_name, recipe])
@@ -97,13 +100,13 @@ def check_recipe():
 def bag_add(item, amount):
     bag[item] += amount
     if __name__ == '__main__':
-        print(f"You obtained {c.BLUE}{amount} {item}(s){r}. You have {c.GREEN}{bag_space()}{r} storage left.")
+        print(f"You obtained {c.CYAN}{amount} {item}(s){r}. You have {c.GREEN}{bag_space()}{r} storage left.")
         joint_prompt()
     else:
         return bag[item]
 
 def bag_full(item):
-    print(f"You obtained {c.BLUE}{bag_space()} {item}(s){r}.\n"
+    print(f"You obtained {c.CYAN}{bag_space()} {item}(s){r}.\n"
           f"Your {c.RED}bag is full{r}! {c.GREEN}Directing home{r} to empty the bag.")
     bag[item] += bag_space()
     joint_prompt()
@@ -116,7 +119,7 @@ def bag_space():
 
 
 def quit_game():
-    print(f"{b.LIGHTYELLOW_EX}{c.BLACK}{s.BRIGHT}Thank you for playing!{r}")
+    print(f"{b.LIGHTYELLOW_EX}{c.BLACK}{s.DIM}Thank you for playing!{r}")
     exit()
 
 
@@ -174,6 +177,7 @@ def main_farm(item, amount, other_farm):
 
 
 def fruit_farm():
+    ascii_magic.to_terminal(fruit_landing)
     print(fruit_arv_msg)
     joint_prompt()
     while True:
@@ -183,6 +187,7 @@ def fruit_farm():
 
 
 def grain_farm():
+    ascii_magic.to_terminal(grain_landing)
     print(grain_arv_msg)
     joint_prompt()
     while True:
@@ -213,15 +218,13 @@ def cook(food_num, amount):
         else:
             for grocery, number in recipe[name].items():
                 storage[grocery] -= (number * amount)
-    if __name__ == '__main__':
-        get_available_dish()
-        print(f"Congrats!! You cooked {c.GREEN}{amount} {printed_dish[food_num]}{r}!\nNow your storage has :\n")
-        check_space(storage)
-    else:
-        return storage
+    get_available_dish()
+    print(f"Congrats!! You cooked {c.GREEN}{amount} {printed_dish[food_num]}{r}!\nNow your storage has :\n")
+    check_space(storage)
 
 
 def home():
+    ascii_magic.to_terminal(home_landing)
     print(base_arv_msg)
     for grocery, amount in bag.items():
         storage[grocery] += amount
@@ -234,7 +237,7 @@ def home():
         print(f"You can {c.GREEN}cook{r} :")
         for name, amount in available_dish.items():
             if amount >= 1:
-                print(f"{c.BLUE}{amount}{r} of {c.GREEN}{name}{r}")
+                print(f"{c.CYAN}{amount}{r} of {c.GREEN}{name}{r}")
         try:
             decision = get_user_choice(f"{decision_temp}\n"
                                        f"(1)Choose dish to cook  (2)Cook later go to farm to harvest (3){off}\n",
@@ -269,11 +272,11 @@ def home():
                                                           f"Max: {c.RED}{max_dish_num}{r}\n",
                                                           range(1, max_dish_num + 1, 1)))
                     except (ValueError, RangeError):
-                        print(f"{b.RED}{c.BLACK}Please enter a positive integer bigger than zero.{r}")
+                        print(f"{b.RED}{c.WHITE}Please enter a positive integer bigger than zero.{r}")
                     except KeyboardInterrupt:
                         print(key_itr_msg)
                     except ExcessError:
-                        print(f"{b.RED}{c.BLACK}The maximum available amount for this dish is {max_dish_num}.{r}")
+                        print(f"{b.RED}{c.WHITE}The maximum available amount for this dish is {max_dish_num}.{r}")
                     else:
                         cook(food_choice, food_amount)
                         break
@@ -285,12 +288,13 @@ def home():
                 raise InputError(decision)
     else:
         print(f"You {c.RED}don't have enough ingredients{r} to cook.\n"
-              f"{c.GREEN}Go back to farm{r} and {c.BLUE}harvest more{r} ingredients.")
+              f"{c.GREEN}Go back to farm{r} and {c.CYAN}harvest more{r} ingredients.")
         return farm_choice()
 
 
 if __name__ == '__main__':
-    print(f"""{b.LIGHTYELLOW_EX}{c.BLACK}{s.BRIGHT}Welcome to farming game!{r}\n
+    ascii_magic.to_terminal(landing)
+    print(f"""{b.LIGHTYELLOW_EX}{c.BLACK}{s.DIM}Welcome to farming game!{r}\n
 {c.GREEN}Harvest ingredients from 2 different farms and cook them at home!{r}""")
     joint_prompt()
     farm_choice()
