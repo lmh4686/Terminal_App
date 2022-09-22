@@ -34,7 +34,6 @@ class TestGetUserChoice:
     def test_num_valid_input(self, monkeypatch):
         monkeypatch.setattr("builtins.input", fake_num_input)
         assert main.get_user_choice('a', range(1, 5, 1))
-        # assert main.get_user_choice('a', range(1, 5, 1))
       
     #Check if RangeError gets rasied for a integer input that are smaller than option's max value. This should pass.
     def test_num_smaller_input(self, monkeypatch):
@@ -56,11 +55,11 @@ class TestGetUserChoice:
             assert main.get_user_choice('a', range(1, 5, 1))
             
 
-class TestCook:
-    def test_ff(self):
-        assert main.printed_dish == {'1': 'Apple Porridge', '2': 'Orange Porridge', '3': 'Plum Porridge'}
-        assert main.storage == {'Apple': 20, 'Orange': 10, 'Plum': 10, 'Wheat': 20, 'Oat': 20, 'Corn': 20}
-        assert main.cook('1', 2) == {'Apple': 6, 'Orange': 10, 'Plum': 10, 'Wheat': 10, 'Oat': 14, 'Corn': 14}
+# class TestCook:
+#     def test_ff(self):
+#         assert main.printed_dish == {'1': 'Apple Porridge', '2': 'Orange Porridge', '3': 'Plum Porridge'}
+#         assert main.storage == {'Apple': 20, 'Orange': 10, 'Plum': 10, 'Wheat': 20, 'Oat': 20, 'Corn': 20}
+#         assert main.cook('1', 2) == {'Apple': 6, 'Orange': 10, 'Plum': 10, 'Wheat': 10, 'Oat': 14, 'Corn': 14}
 
 #bag_add(item, amount) takes 2 arguments one is obtained item name and amount.
 #Bag is a dictionary stores item by its name and amount.

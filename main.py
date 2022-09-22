@@ -1,14 +1,17 @@
 from random import randint, randrange, choice
 from prettytable import PrettyTable
 from colorama import init, Fore, Back, Style
+import json
+from sys import argv
+
 t, c, b, s, r = PrettyTable(), Fore, Back, Style, Style.RESET_ALL
 init()
 fruit, grain, off = f"Go to Fruit farm", f"Go to Grain farm", f"Quit the game"
 decision_temp = f"Enter a {c.RED}represented number{r} to make a {c.GREEN}decision{r}."
-fruit_arv_msg = f"{b.YELLOW}{c.BLACK}{s.DIM}You are at the Fruit farm{r}"
-grain_arv_msg = f"{b.YELLOW}{c.BLACK}{s.DIM}You are at the Grain farm{r}"
+fruit_arv_msg = f"{b.LIGHTYELLOW_EX}{c.BLACK}{s.BRIGHT}You are at the Fruit farm{r}"
+grain_arv_msg = f"{b.LIGHTYELLOW_EX}{c.BLACK}{s.BRIGHT}You are at the Grain farm{r}"
 base_arv_msg = f"{b.LIGHTYELLOW_EX}{s.BRIGHT}{c.BLACK}You are in home{r}"
-key_itr_msg = f"{b.RED}{c.BLACK}{s.DIM}You can't quit the game in this stage.{r}"
+key_itr_msg = f"{b.RED}{c.BLACK}{s.BRIGHT}You can't quit the game in this stage.{r}"
 fruit_obj = ("Plum", "Apple", "Orange")
 grain_obj = ("Wheat", "Oat", "Corn")
 bag = {"Plum": 0, "Apple": 0, "Orange": 0, "Wheat": 0, "Oat": 0, "Corn": 0}
@@ -39,7 +42,7 @@ class ExcessError(Exception):
 
 
 def keyboard_itr_msg(exit_num):
-    print(f"\nIf you wish to {s.DIM}{c.RED}quit{r} the game, please type {c.RED}{exit_num}{r}.")
+    print(f"\nIf you wish to {s.BRIGHT}{c.RED}quit{r} the game, please type {c.RED}{exit_num}{r}.")
 
 
 def get_user_choice(prompt, options):
@@ -113,7 +116,7 @@ def bag_space():
 
 
 def quit_game():
-    print(f"{b.YELLOW}{c.BLACK}{s.DIM}Thank you for playing!{r}")
+    print(f"{b.LIGHTYELLOW_EX}{c.BLACK}{s.BRIGHT}Thank you for playing!{r}")
     exit()
 
 
@@ -285,6 +288,9 @@ def home():
               f"{c.GREEN}Go back to farm{r} and {c.BLUE}harvest more{r} ingredients.")
         return farm_choice()
 
-if __name__ == '__main__':
-    farm_choice()
 
+if __name__ == '__main__':
+    print(f"""{b.LIGHTYELLOW_EX}{c.BLACK}{s.BRIGHT}Welcome to farming game!{r}\n
+{c.GREEN}Harvest ingredients from 2 different farms and cook them at home!{r}""")
+    joint_prompt()
+    farm_choice()
