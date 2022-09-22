@@ -1,7 +1,15 @@
+## Project Overview
+### [Github repository](https://github.com/lmh4686/Terminal_App)
+### [PEP8](https://peps.python.org/pep-0008/) style has been applied for this project.
+### Main features
+ 1. `def cook()`
+***
+###
 ## Game introdution 
-### This farming game is inspired by [Minecraft](http://minecraft.net/minecraft).
+### This farming game is inspired from [Minecraft](http://minecraft.net/minecraft).
 ***
 ## Installation guidance
+## This program is designed for windows users only.
 ### 1. Install [Window Terminal](https://apps.microsoft.com/store/detail/windows-terminal/9N0DX20HK701?hl=en-au&gl=au)
 ### 2. Install [Ubuntu 22.04.1 LTS](https://apps.microsoft.com/store/detail/ubuntu-22041-lts/9PN20MSR04DW?hl=en-au&gl=au)
 ### 3. Enable the optional feature from PowerShell
@@ -34,8 +42,11 @@ cd Terminal_App/src
 ./farming_game.sh
 ```
 ### 8. Authorise the program to activate Virtualenv and download packages.
-
-
+![farming_game.sh Initial screen](/docs/step_8.png)  
+ - Enter `Y` to authorize.
+ - This will create a virtual environment and download required packages.
+### 9. Enjoy the game.
+![farming_game.sh Initial screen](/docs/step_9.png)  
 <!-- fruit farm: https://unsplash.com/photos/0zpoa3TacEo
 grain farm:https://unsplash.com/photos/0zpoa3TacEo
 house : https://unsplash.com/photos/Q27HmRKdHPQ
