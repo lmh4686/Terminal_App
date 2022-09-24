@@ -144,8 +144,8 @@ def check_recipe():
 def bag_add(item, amount):
     bag[item] += amount
     if __name__ == '__main__':
-        print(f"You obtained {c.CYAN}{amount} {item}(s){r}."
-              f" You have {c.GREEN}{bag_space()}{r} space left.")
+        print(f"You obtained {c.CYAN}{amount} {item}(s){r}. "
+              f"You have {c.GREEN}{bag_space()}{r} space left.")
         joint_prompt()
     else:
         return bag[item]
@@ -169,7 +169,7 @@ def farm_choice():
     while True:
         try:
             decision = get_user_choice(
-                f"{decision_temp}\n(1).{fruit}\n(2).{grain}\n(3).{off}\n",
+                f"{decision_temp}\n(1){fruit}\n(2){grain}\n(3){off}\n",
                 ['1', '2', '3'])
         except KeyboardInterrupt:
             keyboard_itr_msg(3)
@@ -188,8 +188,8 @@ def main_farm(item, amount, other_farm):
     while True:
         try:
             decision = get_user_choice(
-                f"{obj_discover_msg(item)}"
-                f"\n(1)Harvest (2)Skip (3)Check bag (4)Check recipes\n"
+                f"{obj_discover_msg(item)}\n"
+                f"(1)Harvest (2)Skip (3)Check bag (4)Check recipes\n"
                 f"(5){other_farm} (6)Go to home (7){off}\n",
                 ['1', '2', '3', '4', '5', '6', '7'])
         except InputError as err:
@@ -207,11 +207,11 @@ def sub_farm_options(
                         harvested_item,
                         harvested_amount,
                         other_farm):
-    if user_input == '1' and sum(bag.values()) + \
-                     harvested_amount < bag_limit:
+    if user_input == '1' and sum(bag.values()) \
+                     + harvested_amount < bag_limit:
         bag_add(harvested_item, harvested_amount)
-    elif user_input == '1' and sum(bag.values()) + \
-                       harvested_amount >= bag_limit:
+    elif user_input == '1' and sum(bag.values()) \
+                       + harvested_amount >= bag_limit:
         bag_full(harvested_item)
     elif user_input == '2':
         pass
@@ -335,7 +335,7 @@ def home():
                         food_amount = int(
                             get_user_choice(
                                 f"How many {c.GREEN}"
-                                f"{printed_dish[food_choice]}{r}"
+                                f"{printed_dish[food_choice]}{r} "
                                 f"do you want to {c.GREEN}cook{r}? "
                                 f"Max: {c.RED}{max_dish_num}{r}\n",
                                 range(1, max_dish_num + 1, 1)))

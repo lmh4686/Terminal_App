@@ -1,0 +1,89 @@
+This will apply for both farms.
+
+Program will begin by letting user to choose to go to the fruit farm or the grain farm. User will have a limited spaced bag that can store harvested items. User can go to the other farm or home anytime on selection.
+
+After selection of farm, random object related with the selected farm will appear randomly such as apple for fruit farm, wheat for grain farm. And then, user will have following selections:
+
+a. Harvest
+After harvest, the object will drop random amount of item and get stored to the bag. And user will see the item with amount that just harvested, what items are in the bag with amount of them. If the bag gets full, user will be taken to home automatically.
+
+b. Skip
+Skip the current object and show another random object. And then give the same 7 options again.
+
+c. Check bag
+Show what ingredients are in the bag with amount.
+
+d. Check recipes
+Show recipes that consist of dish name and required ingredients, amount for each.
+
+e. Go to other farm
+Direct to other farm to harvest different objects.
+
+f. Go to home
+Direct to home. Further details will be on the next post.
+
+g. Quit the game
+Immediately finish the program after print a short message.
+
+Sequence of implementation
+
+Ask user to choose going fruit farm or grain farm
+
+Show where user is by printing message.
+
+Show a random object that is related to the farm where user is.
+
+Show the options from 1 to 7 listed above.
+
+5-a. User chose harvest.
+Add random amount of harvested item in the bag -> Show harvested amount of item and left over bag space to user. -> Go back to number 3.
+
+5-b. User chose skip.
+Go back to number 3.
+
+5-c. User chose check bag
+Get each item, amount in bag -> Show them in the user friendly way. -> Continue to number 4.
+
+5-d User chose recipes
+Get each dish name, recipe in recipes -> Get each ingredient and amount -> Show them in the user friendly way. -> Continue to number 4.
+
+5-e User chose go to other farm
+Return other farm function that has same structure but different harvestable object.
+
+5-f User chose go to home
+Return home function that direct to home
+
+5-g User chose quit the game
+Terminate the program.
+
+Key tasks checklist
+
+1. Develop a way to get random amount, random selection.
+
+16 Sep
+
+
+2. Develop a way to keep tracking the items with their amount and available storage in the bag.
+
+16 Sep
+
+
+3. Apply the logics that can finish the loop and execute other functions on request.
+
+16 Sep
+
+
+4. Apply the loops that can iterate the structure but need to generate random object and amount for each loop.
+
+17 Sep
+
+
+5. Apply error handling for all possible wrong inputs.
+
+17 Sep
+
+
+6. Find commonly shared logic between two farms and apply dry codes.
+
+17 Sep
+

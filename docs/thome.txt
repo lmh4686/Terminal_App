@@ -1,0 +1,69 @@
+Home
+
+When the bag is full, user will be taken to home automatically or on their choice while they are in the farm. User can't harvest anything at home. On arrival, all the items in the bag will be transferred to storage automatically. There will be following features.
+
+a. Storage
+Has unlimited space. All the items in the bag will be transferred to the storage on arrival with a message to user to let this know and it will show each items with their amount in the storage.
+
+b. Cook
+If the storage contain the same or more items than the listed items in the recipe, user can cook by consuming the required amount of items in the storage.
+
+c. Go to fruit/grain farm
+Direct to selected farm.
+
+d. Quit the game
+Terminate the program
+
+Sequence of implementation.
+
+1. Transfer all the items in the bag to the storage on arrival.
+Get each item and amount in the bag -> Make storage has same item and amount with the bag -> Make bag's value to zero.
+
+2. Compare items in the storage with the recipes 
+Get each of required grocery and amount in each recipe -> Divide each amount of grocery in the recipe by the amount of the same grocery in the storage -> If all the quotient is bigger than zero in that recipe, save all quotient in a list -> get a minimum value of the quotient and save it with the dish's name-> clear the list for the next recipe
+ 
+3-a. If there's saved item in step 2
+Show all available dish with available amount for each
+options : Cook, Go to farm, quit the game
+Cook: Show a list of available dish -> Ask user to enter a desired number of dish to cook -> Multiply the selected amount by the selected dish's ingredient's amount and deduct it from the storage -> Show that selected dish is cooked with left over items in the storage after cook -> Back to number 2.
+Go to farm : Direct to the farm
+Quit the game : Terminate the program
+
+3-b. If there's no saved item in step 2
+Show a message no available dish to cook.
+options: Go to farm, quit the game
+Go to farm: Direct to the farm
+Quit the game: Terminate the program
+
+Main task check list
+
+
+Create a storage that has same data type with bag
+
+19 Sep
+
+
+Create a loop that iterate from number 2 to number 3-a that only execute when there's available dish to cook.
+
+19 Sep
+
+
+Update the available dish each time on arrival and after cook
+
+19 Sep
+
+
+Convert sting input to integer input for the input of user's desire amount of dish to cook
+
+20 Sep
+
+
+Apply same function that used at the beginning for choosing farm
+
+20 Sep
+
+
+Expect ValueError for error handling when converting input to integer
+
+20 Sep
+

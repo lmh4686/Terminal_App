@@ -1,0 +1,60 @@
+For components
+Bag
+Hide checked itemsDelete
+100%
+
+No lost or change of items inside of the bag when move between two farms
+
+When bag gets full, it automatically directs to home
+
+Direct to home when bag exactly hit the limit. Left over space should be 0
+
+Correctly store harvested each item and its respective amount
+
+Bag gets empty on arrival to home
+
+When user check the bag, hide the items that value is 0. Show the item and amount only if they have more than 0
+Add an item
+Storage
+Hide checked itemsDelete
+100%
+
+Receive all items correctly from the bag on arrival
+
+Keep the stored items and amounts when user is out of the home and add all items correctly from the bag when user returns to home
+
+All items are comparable with recipes so available dish can be recommended
+
+Items deducted correct amount after cooking based on the selected dish's recipe
+
+Show storage each time user returns to home and after cooking
+Add an item
+Recipes
+Hide checked itemsDelete
+100%
+
+Items only related with harvestable objects
+
+All recipes have fixed values, no changes under any circumstance
+
+Develop 3 to 5 recipes that have reasonable requirement for cooking
+
+Able to be viewed by user in user friendly form
+
+
+
+Comparable with storage for deducting items in the storage after cook.
+Add an item
+Cook
+Hide checked itemsDelete
+100%
+
+Able to cook multiple amount of dishes at once.
+
+Target the selected dish in recipe correctly
+
+Get accurate information from the recipe and deduct items from storage correctly after cook
+
+Update available dish correctly after cook
+
+Cook option doesn't display, when storage has not enough item to cook.
