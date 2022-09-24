@@ -1,12 +1,4 @@
-For all locations
-in list Detaild features by location
-Description
-Edit
-Checklist for all source code.
-
 Checklist
-Hide checked itemsDelete
-100%
 
 Apply try and except for all inputs
 

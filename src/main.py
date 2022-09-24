@@ -203,10 +203,10 @@ def main_farm(item, amount, other_farm):
 
 
 def sub_farm_options(
-                        user_input,
-                        harvested_item,
-                        harvested_amount,
-                        other_farm):
+                     user_input,
+                     harvested_item,
+                     harvested_amount,
+                     other_farm):
     if user_input == '1' and sum(bag.values()) \
                      + harvested_amount < bag_limit:
         bag_add(harvested_item, harvested_amount)

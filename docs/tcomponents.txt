@@ -1,7 +1,20 @@
 For components
+
+Harvesting
+
+Different harvestable object depends on farm
+
+Random object appears each time after harvest
+
+Harvested item goes to the bag right after harvest
+
+After harvest, show which and how many of item harvested each time correctly.
+
+Able to skip harvesting and move on to the next random object
+Add an item
+
 Bag
-Hide checked itemsDelete
-100%
+
 
 No lost or change of items inside of the bag when move between two farms
 
@@ -14,10 +27,8 @@ Correctly store harvested each item and its respective amount
 Bag gets empty on arrival to home
 
 When user check the bag, hide the items that value is 0. Show the item and amount only if they have more than 0
-Add an item
+
 Storage
-Hide checked itemsDelete
-100%
 
 Receive all items correctly from the bag on arrival
 
@@ -28,10 +39,8 @@ All items are comparable with recipes so available dish can be recommended
 Items deducted correct amount after cooking based on the selected dish's recipe
 
 Show storage each time user returns to home and after cooking
-Add an item
+
 Recipes
-Hide checked itemsDelete
-100%
 
 Items only related with harvestable objects
 
@@ -41,13 +50,9 @@ Develop 3 to 5 recipes that have reasonable requirement for cooking
 
 Able to be viewed by user in user friendly form
 
-
-
 Comparable with storage for deducting items in the storage after cook.
-Add an item
+
 Cook
-Hide checked itemsDelete
-100%
 
 Able to cook multiple amount of dishes at once.
 
