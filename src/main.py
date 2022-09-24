@@ -290,6 +290,13 @@ def cook(food_num, amount):
 
 
 def print_available_dish():
+    print(f"You can {c.GREEN}cook{r} :")
+    for name, amount in available_dish.items():
+        if amount > 0:
+            print(f"{c.CYAN}{amount}{r} of {c.GREEN}{name}{r}")
+
+
+def prompt_available_dish():
     order_num = 0
     for dish_name, dish_amount in available_dish.items():
         if dish_amount > 0:
@@ -298,13 +305,34 @@ def print_available_dish():
             printed_dish[str(order_num)] = dish_name
 
 
+def get_amount_dish_and_cook(food_num):
+    max_dish_num = available_dish[printed_dish[food_num]]
+    while True:
+        try:
+            food_amount = int(
+                get_user_choice(
+                    f"How many {c.GREEN}"
+                    f"{printed_dish[food_num]}{r} "
+                    f"do you want to {c.GREEN}cook{r}? "
+                    f"Max: {c.RED}{max_dish_num}{r}\n",
+                    range(1, max_dish_num + 1, 1)))
+        except (ValueError, RangeError):
+            print(f"{b.RED}{c.WHITE}Please enter a positive "
+                  f"integer bigger than zero.{r}")
+        except KeyboardInterrupt:
+            print(key_itr_msg)
+        except ExcessError:
+            print(f"{b.RED}{c.WHITE}The maximum available amount "
+                  f"for this dish is {max_dish_num}.{r}")
+        else:
+            cook(food_num, food_amount)
+            break
+
+
 def home():
     home_arrival()
     while sum(available_dish.values()) > 0:
-        print(f"You can {c.GREEN}cook{r} :")
-        for name, amount in available_dish.items():
-            if amount > 0:
-                print(f"{c.CYAN}{amount}{r} of {c.GREEN}{name}{r}")
+        print_available_dish()
         try:
             decision = get_user_choice(
                 f"{decision_temp}\n"
@@ -319,37 +347,18 @@ def home():
             if decision == '1':
                 while True:
                     print(decision_temp)
-                    print_available_dish()
-                    try:
-                        food_choice = get_user_choice(
-                            "", list(printed_dish.keys()))
+                    prompt_available_dish()
+                    try:  # PEP8 length limit
+                        food_choice = get_user_choice("",
+                                                      list(printed_dish.keys())
+                                                      )
                     except InputError as err:
                         print(err)
                     except KeyboardInterrupt:
                         print(key_itr_msg)
                     else:
                         break
-                while True:
-                    max_dish_num = available_dish[printed_dish[food_choice]]
-                    try:
-                        food_amount = int(
-                            get_user_choice(
-                                f"How many {c.GREEN}"
-                                f"{printed_dish[food_choice]}{r} "
-                                f"do you want to {c.GREEN}cook{r}? "
-                                f"Max: {c.RED}{max_dish_num}{r}\n",
-                                range(1, max_dish_num + 1, 1)))
-                    except (ValueError, RangeError):
-                        print(f"{b.RED}{c.WHITE}Please enter a positive "
-                              f"integer bigger than zero.{r}")
-                    except KeyboardInterrupt:
-                        print(key_itr_msg)
-                    except ExcessError:
-                        print(f"{b.RED}{c.WHITE}The maximum available amount "
-                              f"for this dish is {max_dish_num}.{r}")
-                    else:
-                        cook(food_choice, food_amount)
-                        break
+                get_amount_dish_and_cook(food_choice)
             elif decision == '2':
                 return farm_choice()
             elif decision == '3':
