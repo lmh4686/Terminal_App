@@ -1,7 +1,8 @@
 # Project Overview
-## Please check my [Github repository](https://github.com/lmh4686/Terminal_App) to view the codes.
-## Please check my [Trello](https://trello.com/b/CeoQTkAx/terminal-app) to check project planning.
-### If Trello link doesn't work, please check these txt files below.
+## [Github repository](https://github.com/lmh4686/Terminal_App)
+## [Project planning](https://trello.com/b/CeoQTkAx/terminal-app)
+## [Presentaion link](https://youtu.be/wtzFZLgmbJc)
+### If project planning link doesn't work, please check these txt files below.
  - [Fruit farm / Grain farm](docs/tfarms.txt)
  - [Home](docs/thome.txt)
  - [For all locations](docs/tall.txt)

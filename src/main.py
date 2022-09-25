@@ -93,7 +93,7 @@ def get_user_choice(prompt, options):
     elif isinstance(options, range) and user_input not in options:
         if int(user_input) > max(options):
             raise ExcessError
-        elif int(user_input) <= 0:
+        elif int(user_input) < 1:
             raise RangeError
     return user_input
 
@@ -242,7 +242,7 @@ def grain_farm():
     print(grain_arv_msg)
     joint_prompt()
     while True:
-        harvested_amount = randrange(1, 3)
+        harvested_amount = randrange(1, 4)
         discovered_item = choice(grain_obj)
         main_farm(discovered_item, harvested_amount, fruit)
 
@@ -260,20 +260,6 @@ def home_arrival():
     get_available_dish()
 
 
-def get_available_dish():
-    for item in recipes:
-        for name, recipe in item.items():
-            for grocery, amount in recipe.items():
-                if storage[grocery] < amount:
-                    available_dish[name] = 0
-                    break
-            else:
-                for grocery, amount in recipe.items():
-                    grocery_quotients.append(storage[grocery] // amount)
-                available_dish[name] = min(grocery_quotients)
-                grocery_quotients.clear()
-
-
 def cook(food_num, amount):
     for recipe in recipes:
         for name in recipe.keys():
@@ -287,6 +273,20 @@ def cook(food_num, amount):
           f"{printed_dish[food_num]}{r}!"
           f"\nNow your storage has :\n")
     check_space(storage)
+
+
+def get_available_dish():
+    for item in recipes:
+        for name, recipe in item.items():
+            for grocery, amount in recipe.items():
+                if storage[grocery] < amount:
+                    available_dish[name] = 0
+                    break
+            else:
+                for grocery, amount in recipe.items():
+                    grocery_quotients.append(storage[grocery] // amount)
+                available_dish[name] = min(grocery_quotients)
+                grocery_quotients.clear()
 
 
 def print_available_dish():
